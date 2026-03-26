@@ -50,3 +50,10 @@
 - [x] Bouton de basculement thème dans login
 - [x] Bouton de basculement thème dans vault
 - [x] Pousser sur GitHub
+
+
+## Corrections Déploiement Vercel
+- [x] Corriger vercel.json avec configuration optimale
+- [x] Ajouter .vercelignore pour ignorer les fichiers inutiles
+- [x] Tester le build localement
+- [x] Valider le serveur en production

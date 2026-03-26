@@ -1,0 +1,11 @@
+node_modules
+.git
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.manus
+.manus-logs
+drizzle/meta
+.next
+out
