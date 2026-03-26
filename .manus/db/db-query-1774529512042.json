@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `vault_items` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`name` varchar(512) NOT NULL,\n\t`type` enum('file','folder') NOT NULL,\n\t`parentId` int,\n\t`s3Key` varchar(1024),\n\t`s3Url` text,\n\t`mimeType` varchar(256),\n\t`fileSize` bigint,\n\t`lastAccessedAt` timestamp NOT NULL DEFAULT (now()),\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `vault_items_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2zLADCpth8oCLZd.root --database SXYL463ckbNTDkLbnZ83Pg --execute CREATE TABLE `vault_items` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`name` varchar(512) NOT NULL,\n\t`type` enum('file','folder') NOT NULL,\n\t`parentId` int,\n\t`s3Key` varchar(1024),\n\t`s3Url` text,\n\t`mimeType` varchar(256),\n\t`fileSize` bigint,\n\t`lastAccessedAt` timestamp NOT NULL DEFAULT (now()),\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `vault_items_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 480
+}
