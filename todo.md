@@ -42,3 +42,11 @@
 ## Configuration
 - [x] vercel.json pour déploiement Vercel
 - [x] Variables d'environnement documentées
+
+
+## Refonte Design Noir/Blanc
+- [x] Thème CSS noir/blanc sobre (sans couleurs)
+- [x] Support thème sombre et clair
+- [x] Bouton de basculement thème dans login
+- [x] Bouton de basculement thème dans vault
+- [x] Pousser sur GitHub

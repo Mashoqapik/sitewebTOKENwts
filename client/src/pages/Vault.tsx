@@ -2,6 +2,7 @@ import ContextMenu, { ContextMenuItem } from "@/components/ContextMenu";
 import FileIcon, { formatFileSize } from "@/components/FileIcon";
 import VaultDialog from "@/components/VaultDialog";
 import { useVaultAuth } from "@/contexts/VaultAuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { trpc } from "@/lib/trpc";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -17,8 +18,10 @@ import {
   Info,
   List,
   LogOut,
+  Moon,
   Plus,
   RefreshCw,
+  Sun,
   Trash2,
   Upload,
   X,
@@ -45,7 +48,9 @@ type SidebarTab = "recent" | "all";
 
 export default function Vault() {
   const { logout } = useVaultAuth();
+  const { theme, toggleTheme } = useTheme();
   const [, navigate] = useLocation();
+  const isDark = theme === "dark";
 
   // Navigation
   const [currentFolderId, setCurrentFolderId] = useState<number | null>(null);
@@ -198,20 +203,20 @@ export default function Vault() {
   const formatDate = (d: Date) => new Date(d).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
   return (
-    <div className="min-h-screen flex" style={{ background: "oklch(0.08 0.02 270)" }}>
+    <div className="min-h-screen flex transition-colors duration-300" style={{ background: isDark ? "#000000" : "#ffffff" }}>
       {/* Drag overlay */}
       <AnimatePresence>
         {isDragging && (
           <motion.div
             className="fixed inset-0 flex items-center justify-center pointer-events-none"
-            style={{ zIndex: 500, background: "oklch(0.65 0.22 290 / 0.1)", border: "2px dashed oklch(0.65 0.22 290 / 0.6)" }}
+            style={{ zIndex: 500, background: isDark ? "rgba(0,0,0,0.8)" : "rgba(0,0,0,0.1)", border: `2px dashed ${isDark ? "#ffffff" : "#000000"}` }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <div className="text-center">
-              <Upload size={48} style={{ color: "oklch(0.75 0.20 290)", margin: "0 auto 12px" }} />
-              <p className="font-orbitron text-xl gradient-text">Déposer les fichiers ici</p>
+              <Upload size={48} style={{ color: isDark ? "#ffffff" : "#000000", margin: "0 auto 12px" }} />
+              <p className="text-xl font-semibold" style={{ color: isDark ? "#ffffff" : "#000000" }}>Déposer les fichiers ici</p>
             </div>
           </motion.div>
         )}
@@ -220,26 +225,26 @@ export default function Vault() {
       {/* ─── Sidebar ─────────────────────────────────────────────────────────── */}
       <motion.aside
         className="w-64 flex-shrink-0 flex flex-col glass-strong"
-        style={{ borderRight: "1px solid oklch(0.18 0.035 270)", minHeight: "100vh" }}
+        style={{ borderRight: `1px solid ${isDark ? "#2a2a2a" : "#e5e5e5"}`, minHeight: "100vh" }}
         initial={{ x: -60, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         {/* Logo */}
-        <div className="px-5 py-5" style={{ borderBottom: "1px solid oklch(0.18 0.035 270)" }}>
+        <div className="px-5 py-5" style={{ borderBottom: `1px solid ${isDark ? "#2a2a2a" : "#e5e5e5"}` }}>
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center glow-primary" style={{ background: "linear-gradient(135deg, oklch(0.55 0.22 290), oklch(0.50 0.25 260))" }}>
               <Files size={16} className="text-white" />
             </div>
             <div>
               <p className="font-orbitron font-bold text-sm gradient-text">VAULT</p>
-              <p className="text-xs font-mono-custom" style={{ color: "oklch(0.45 0.02 270)" }}>TokenWTS</p>
+              <p className="text-xs font-mono-custom" style={{ color: isDark ? "#999999" : "#666666" }}>TokenWTS</p>
             </div>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="px-3 py-3 flex gap-2" style={{ borderBottom: "1px solid oklch(0.18 0.035 270)" }}>
+        <div className="px-3 py-3 flex gap-2" style={{ borderBottom: `1px solid ${isDark ? "#2a2a2a" : "#e5e5e5"}` }}>
           <motion.button
             onClick={() => setShowUpload(true)}
             className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold"
@@ -263,7 +268,7 @@ export default function Vault() {
 
         {/* Tabs */}
         <div className="px-3 pt-3">
-          <div className="flex rounded-lg overflow-hidden" style={{ background: "oklch(0.12 0.025 270)" }}>
+          <div className="flex rounded-lg overflow-hidden" style={{ background: isDark ? "#1a1a1a" : "#f5f5f5" }}>
             {(["recent", "all"] as SidebarTab[]).map(tab => (
               <button
                 key={tab}
@@ -287,7 +292,7 @@ export default function Vault() {
             recentItems.length === 0 ? (
               <div className="text-center py-8">
                 <Clock size={24} style={{ color: "oklch(0.35 0.02 270)", margin: "0 auto 8px" }} />
-                <p className="text-xs" style={{ color: "oklch(0.40 0.02 270)" }}>Aucun fichier récent</p>
+                <p className="text-xs" style={{ color: isDark ? "#999999" : "#666666" }}>Aucun fichier récent</p>
               </div>
             ) : (
               recentItems.map((item: VaultItem) => (
@@ -307,7 +312,7 @@ export default function Vault() {
             allItems.length === 0 ? (
               <div className="text-center py-8">
                 <Files size={24} style={{ color: "oklch(0.35 0.02 270)", margin: "0 auto 8px" }} />
-                <p className="text-xs" style={{ color: "oklch(0.40 0.02 270)" }}>Vault vide</p>
+                <p className="text-xs" style={{ color: isDark ? "#999999" : "#666666" }}>Vault vide</p>
               </div>
             ) : (
               allItems.map((item: VaultItem) => (
@@ -320,7 +325,7 @@ export default function Vault() {
                 >
                   <FileIcon type={item.type} mimeType={item.mimeType} name={item.name} size={14} />
                   <span className="text-xs truncate flex-1">{item.name}</span>
-                  <span className="text-xs shrink-0" style={{ color: "oklch(0.40 0.02 270)" }}>
+                  <span className="text-xs shrink-0" style={{ color: isDark ? "#999999" : "#666666" }}>
                     {item.type === "file" ? formatFileSize(item.fileSize) : ""}
                   </span>
                 </motion.button>
@@ -334,7 +339,7 @@ export default function Vault() {
           <motion.button
             onClick={() => { logout(); navigate("/"); }}
             className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
-            style={{ color: "oklch(0.55 0.02 270)" }}
+            style={{ color: isDark ? "#999999" : "#666666" }}
             whileHover={{ backgroundColor: "oklch(0.60 0.22 25 / 0.1)", color: "oklch(0.65 0.22 25)" }}
           >
             <LogOut size={14} />
@@ -348,7 +353,7 @@ export default function Vault() {
         {/* Top bar */}
         <motion.header
           className="flex items-center gap-4 px-6 py-4 glass-strong"
-          style={{ borderBottom: "1px solid oklch(0.18 0.035 270)" }}
+          style={{ borderBottom: `1px solid ${isDark ? "#2a2a2a" : "#e5e5e5"}` }}
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
@@ -357,7 +362,7 @@ export default function Vault() {
           <div className="flex items-center gap-1 flex-1 min-w-0">
             {breadcrumbs.map((crumb, i) => (
               <div key={i} className="flex items-center gap-1">
-                {i > 0 && <ChevronRight size={14} style={{ color: "oklch(0.40 0.02 270)" }} />}
+                {i > 0 && <ChevronRight size={14} style={{ color: isDark ? "#999999" : "#666666" }} />}
                 <motion.button
                   onClick={() => navigateTo(crumb, i)}
                   className="flex items-center gap-1.5 px-2 py-1 rounded-lg text-sm transition-colors"
@@ -377,16 +382,29 @@ export default function Vault() {
           {/* Controls */}
           <div className="flex items-center gap-2">
             <motion.button
+              onClick={toggleTheme}
+              className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+              style={{
+                background: isDark ? "#1a1a1a" : "#f5f5f5",
+                border: `1px solid ${isDark ? "#2a2a2a" : "#e5e5e5"}`,
+                color: isDark ? "#ffffff" : "#000000",
+              }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isDark ? <Sun size={14} /> : <Moon size={14} />}
+            </motion.button>
+            <motion.button
               onClick={() => { utils.vault.list.invalidate(); utils.vault.recent.invalidate(); utils.vault.all.invalidate(); }}
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ color: "oklch(0.55 0.02 270)" }}
-              whileHover={{ backgroundColor: "oklch(0.15 0.03 270)", color: "oklch(0.80 0.01 270)" }}
+              className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+              style={{ color: isDark ? "#999999" : "#666666" }}
+              whileHover={{ backgroundColor: isDark ? "#1a1a1a" : "#f5f5f5", color: isDark ? "#ffffff" : "#000000" }}
               whileTap={{ rotate: 180 }}
               transition={{ duration: 0.3 }}
             >
               <RefreshCw size={14} />
             </motion.button>
-            <div className="flex rounded-lg overflow-hidden" style={{ background: "oklch(0.12 0.025 270)" }}>
+            <div className="flex rounded-lg overflow-hidden" style={{ background: isDark ? "#1a1a1a" : "#f5f5f5" }}>
               {(["grid", "list"] as ViewMode[]).map(mode => (
                 <motion.button
                   key={mode}
@@ -429,7 +447,7 @@ export default function Vault() {
               {Object.entries(uploadProgress).map(([name, progress]) => (
                 <div key={name} className="flex items-center gap-3 py-1">
                   <span className="text-xs truncate flex-1" style={{ color: "oklch(0.70 0.01 270)" }}>{name}</span>
-                  <div className="w-32 h-1.5 rounded-full overflow-hidden" style={{ background: "oklch(0.20 0.04 270)" }}>
+                  <div className="w-32 h-1.5 rounded-full overflow-hidden" style={{ background: isDark ? "#2a2a2a" : "#e5e5e5" }}>
                     <motion.div
                       className="h-full rounded-full"
                       style={{ background: "linear-gradient(90deg, oklch(0.65 0.22 290), oklch(0.55 0.25 260))" }}
@@ -437,7 +455,7 @@ export default function Vault() {
                       animate={{ width: `${progress}%` }}
                     />
                   </div>
-                  <span className="text-xs font-mono-custom" style={{ color: "oklch(0.55 0.02 270)" }}>{progress}%</span>
+                  <span className="text-xs font-mono-custom" style={{ color: isDark ? "#999999" : "#666666" }}>{progress}%</span>
                 </div>
               ))}
             </motion.div>
@@ -467,8 +485,8 @@ export default function Vault() {
               >
                 <Files size={48} style={{ color: "oklch(0.30 0.04 270)", margin: "0 auto 16px" }} />
               </motion.div>
-              <p className="font-semibold mb-2" style={{ color: "oklch(0.55 0.02 270)" }}>Ce dossier est vide</p>
-              <p className="text-sm" style={{ color: "oklch(0.40 0.02 270)" }}>Glissez des fichiers ici ou cliquez sur "Déposer"</p>
+              <p className="font-semibold mb-2" style={{ color: isDark ? "#999999" : "#666666" }}>Ce dossier est vide</p>
+              <p className="text-sm" style={{ color: isDark ? "#999999" : "#666666" }}>Glissez des fichiers ici ou cliquez sur "Déposer"</p>
             </motion.div>
           ) : viewMode === "grid" ? (
             <motion.div
@@ -500,7 +518,7 @@ export default function Vault() {
                       {item.name}
                     </span>
                     {item.type === "file" && (
-                      <span className="text-xs font-mono-custom" style={{ color: "oklch(0.45 0.02 270)" }}>
+                      <span className="text-xs font-mono-custom" style={{ color: isDark ? "#999999" : "#666666" }}>
                         {formatFileSize(item.fileSize)}
                       </span>
                     )}
@@ -510,7 +528,7 @@ export default function Vault() {
                     <motion.button
                       onClick={e => { e.stopPropagation(); setInfoItem(item); setShowInfo(true); }}
                       className="w-5 h-5 rounded flex items-center justify-center"
-                      style={{ background: "oklch(0.20 0.04 270)" }}
+                      style={{ background: isDark ? "#2a2a2a" : "#e5e5e5" }}
                       whileHover={{ scale: 1.1 }}
                     >
                       <Info size={10} style={{ color: "oklch(0.65 0.22 290)" }} />
@@ -522,7 +540,7 @@ export default function Vault() {
           ) : (
             <motion.div className="flex flex-col gap-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               {/* Header */}
-              <div className="grid grid-cols-12 gap-4 px-3 py-2 text-xs font-semibold" style={{ color: "oklch(0.45 0.02 270)" }}>
+              <div className="grid grid-cols-12 gap-4 px-3 py-2 text-xs font-semibold" style={{ color: isDark ? "#999999" : "#666666" }}>
                 <div className="col-span-5">Nom</div>
                 <div className="col-span-2">Type</div>
                 <div className="col-span-2">Taille</div>
@@ -546,24 +564,24 @@ export default function Vault() {
                 >
                   <div className="col-span-5 flex items-center gap-2.5 min-w-0">
                     <FileIcon type={item.type} mimeType={item.mimeType} name={item.name} size={16} />
-                    <span className="text-sm truncate" style={{ color: "oklch(0.85 0.01 270)" }}>{item.name}</span>
+                    <span className="text-sm truncate" style={{ color: isDark ? "#ffffff" : "#000000" }}>{item.name}</span>
                   </div>
-                  <div className="col-span-2 flex items-center text-xs" style={{ color: "oklch(0.50 0.02 270)" }}>
+                  <div className="col-span-2 flex items-center text-xs" style={{ color: isDark ? "#999999" : "#666666" }}>
                     {item.type === "folder" ? "Dossier" : item.mimeType?.split("/")[1]?.toUpperCase() ?? "Fichier"}
                   </div>
-                  <div className="col-span-2 flex items-center text-xs font-mono-custom" style={{ color: "oklch(0.50 0.02 270)" }}>
+                  <div className="col-span-2 flex items-center text-xs font-mono-custom" style={{ color: isDark ? "#999999" : "#666666" }}>
                     {item.type === "file" ? formatFileSize(item.fileSize) : "—"}
                   </div>
                   <div className="col-span-3 flex items-center justify-between">
-                    <span className="text-xs" style={{ color: "oklch(0.50 0.02 270)" }}>
+                    <span className="text-xs" style={{ color: isDark ? "#999999" : "#666666" }}>
                       {new Date(item.updatedAt).toLocaleDateString("fr-FR")}
                     </span>
                     <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
                       <motion.button onClick={e => { e.stopPropagation(); setInfoItem(item); setShowInfo(true); }} whileHover={{ scale: 1.1 }}>
-                        <Info size={13} style={{ color: "oklch(0.55 0.02 270)" }} />
+                        <Info size={13} style={{ color: isDark ? "#999999" : "#666666" }} />
                       </motion.button>
                       <motion.button onClick={e => { e.stopPropagation(); setShowRename(item); setRenameName(item.name); }} whileHover={{ scale: 1.1 }}>
-                        <Edit3 size={13} style={{ color: "oklch(0.55 0.02 270)" }} />
+                        <Edit3 size={13} style={{ color: isDark ? "#999999" : "#666666" }} />
                       </motion.button>
                       <motion.button onClick={e => { e.stopPropagation(); setShowDelete(item); }} whileHover={{ scale: 1.1 }}>
                         <Trash2 size={13} style={{ color: "oklch(0.60 0.22 25)" }} />
@@ -651,7 +669,7 @@ export default function Vault() {
       <VaultDialog open={!!showDelete} onClose={() => setShowDelete(null)} title="Confirmer la suppression">
         <div className="flex flex-col gap-4">
           <p className="text-sm" style={{ color: "oklch(0.70 0.01 270)" }}>
-            Supprimer <strong style={{ color: "oklch(0.90 0.01 270)" }}>"{showDelete?.name}"</strong> ?
+            Supprimer <strong style={{ color: isDark ? "#ffffff" : "#000000" }}>"{showDelete?.name}"</strong> ?
             {showDelete?.type === "folder" && " Tout le contenu sera supprimé."}
           </p>
           <div className="flex gap-3">
@@ -679,8 +697,8 @@ export default function Vault() {
             <div className="flex items-center gap-3 pb-4" style={{ borderBottom: "1px solid oklch(0.20 0.04 270)" }}>
               <FileIcon type={infoItem.type} mimeType={infoItem.mimeType} name={infoItem.name} size={32} />
               <div>
-                <p className="font-semibold text-sm" style={{ color: "oklch(0.90 0.01 270)" }}>{infoItem.name}</p>
-                <p className="text-xs" style={{ color: "oklch(0.50 0.02 270)" }}>{infoItem.type === "folder" ? "Dossier" : "Fichier"}</p>
+                <p className="font-semibold text-sm" style={{ color: isDark ? "#ffffff" : "#000000" }}>{infoItem.name}</p>
+                <p className="text-xs" style={{ color: isDark ? "#999999" : "#666666" }}>{infoItem.type === "folder" ? "Dossier" : "Fichier"}</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -692,8 +710,8 @@ export default function Vault() {
                 { label: "Dernier accès", value: formatDate(infoItem.lastAccessedAt) },
                 { label: "ID", value: `#${infoItem.id}` },
               ].map(({ label, value }) => (
-                <div key={label} className="rounded-lg p-3" style={{ background: "oklch(0.10 0.025 270)" }}>
-                  <p className="text-xs mb-1" style={{ color: "oklch(0.45 0.02 270)" }}>{label}</p>
+                <div key={label} className="rounded-lg p-3" style={{ background: isDark ? "#0a0a0a" : "#ffffff" }}>
+                  <p className="text-xs mb-1" style={{ color: isDark ? "#999999" : "#666666" }}>{label}</p>
                   <p className="text-xs font-mono-custom truncate" style={{ color: "oklch(0.80 0.01 270)" }}>{value}</p>
                 </div>
               ))}
@@ -744,7 +762,7 @@ export default function Vault() {
           >
             <Upload size={32} style={{ color: "oklch(0.55 0.20 290)", margin: "0 auto 12px" }} />
             <p className="text-sm font-semibold" style={{ color: "oklch(0.75 0.01 270)" }}>Glissez vos fichiers ici</p>
-            <p className="text-xs mt-1" style={{ color: "oklch(0.45 0.02 270)" }}>ou cliquez pour sélectionner</p>
+            <p className="text-xs mt-1" style={{ color: isDark ? "#999999" : "#666666" }}>ou cliquez pour sélectionner</p>
             <input
               ref={fileInputRef}
               type="file"
@@ -757,12 +775,12 @@ export default function Vault() {
           {uploadFiles.length > 0 && (
             <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
               {uploadFiles.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "oklch(0.10 0.025 270)" }}>
+                <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: isDark ? "#0a0a0a" : "#ffffff" }}>
                   <FileIcon type="file" mimeType={f.type} name={f.name} size={14} />
                   <span className="text-xs flex-1 truncate" style={{ color: "oklch(0.75 0.01 270)" }}>{f.name}</span>
-                  <span className="text-xs font-mono-custom" style={{ color: "oklch(0.45 0.02 270)" }}>{formatFileSize(f.size)}</span>
+                  <span className="text-xs font-mono-custom" style={{ color: isDark ? "#999999" : "#666666" }}>{formatFileSize(f.size)}</span>
                   <button onClick={() => setUploadFiles(prev => prev.filter((_, j) => j !== i))}>
-                    <X size={12} style={{ color: "oklch(0.55 0.02 270)" }} />
+                    <X size={12} style={{ color: isDark ? "#999999" : "#666666" }} />
                   </button>
                 </div>
               ))}
@@ -806,9 +824,9 @@ export default function Vault() {
               onClick={e => e.stopPropagation()}
             >
               <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid oklch(0.20 0.04 270)" }}>
-                <span className="text-sm font-semibold" style={{ color: "oklch(0.85 0.01 270)" }}>{previewItem.name}</span>
+                <span className="text-sm font-semibold" style={{ color: isDark ? "#ffffff" : "#000000" }}>{previewItem.name}</span>
                 <button onClick={() => setPreviewItem(null)} className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-white/10">
-                  <X size={14} style={{ color: "oklch(0.60 0.02 270)" }} />
+                  <X size={14} style={{ color: isDark ? "#999999" : "#666666" }} />
                 </button>
               </div>
               <div className="overflow-auto max-h-[calc(90vh-60px)] flex items-center justify-center p-4">
@@ -823,7 +841,7 @@ export default function Vault() {
                 ) : (
                   <div className="text-center py-8">
                     <FileIcon type="file" mimeType={previewItem.mimeType} name={previewItem.name} size={48} />
-                    <p className="mt-4 text-sm" style={{ color: "oklch(0.60 0.02 270)" }}>Aperçu non disponible</p>
+                    <p className="mt-4 text-sm" style={{ color: isDark ? "#999999" : "#666666" }}>Aperçu non disponible</p>
                     <a href={previewItem.s3Url!} download={previewItem.name} target="_blank" rel="noreferrer"
                       className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-lg text-sm font-semibold"
                       style={{ background: "oklch(0.65 0.22 290)", color: "white" }}>

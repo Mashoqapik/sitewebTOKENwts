@@ -42,44 +42,78 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ─── Thème clair (défaut) ─────────────────────────────────────────────────── */
 :root {
-  --radius: 0.75rem;
-  /* Thème sombre ultra-esthétique violet/bleu */
-  --background: oklch(0.08 0.02 270);
-  --foreground: oklch(0.95 0.01 270);
-  --card: oklch(0.11 0.025 270);
-  --card-foreground: oklch(0.95 0.01 270);
-  --popover: oklch(0.10 0.025 270);
-  --popover-foreground: oklch(0.95 0.01 270);
-  --primary: oklch(0.65 0.22 290);
-  --primary-foreground: oklch(0.98 0.005 270);
-  --secondary: oklch(0.15 0.03 270);
-  --secondary-foreground: oklch(0.90 0.01 270);
-  --muted: oklch(0.14 0.025 270);
-  --muted-foreground: oklch(0.60 0.02 270);
-  --accent: oklch(0.55 0.25 260);
-  --accent-foreground: oklch(0.98 0.005 270);
-  --destructive: oklch(0.60 0.22 25);
-  --destructive-foreground: oklch(0.98 0.005 270);
-  --border: oklch(0.20 0.04 270);
-  --input: oklch(0.16 0.03 270);
-  --ring: oklch(0.65 0.22 290);
-  --chart-1: oklch(0.65 0.22 290);
-  --chart-2: oklch(0.60 0.20 220);
-  --chart-3: oklch(0.55 0.18 180);
-  --chart-4: oklch(0.70 0.15 320);
-  --chart-5: oklch(0.65 0.20 250);
-  --sidebar: oklch(0.09 0.022 270);
-  --sidebar-foreground: oklch(0.90 0.01 270);
-  --sidebar-primary: oklch(0.65 0.22 290);
-  --sidebar-primary-foreground: oklch(0.98 0.005 270);
-  --sidebar-accent: oklch(0.14 0.03 270);
-  --sidebar-accent-foreground: oklch(0.90 0.01 270);
-  --sidebar-border: oklch(0.18 0.035 270);
-  --sidebar-ring: oklch(0.65 0.22 290);
+  --radius: 0.5rem;
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #f5f5f5;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #e5e5e5;
+  --secondary-foreground: #000000;
+  --muted: #d4d4d4;
+  --muted-foreground: #666666;
+  --accent: #000000;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e5e5e5;
+  --input: #f5f5f5;
+  --ring: #000000;
+  --chart-1: #000000;
+  --chart-2: #333333;
+  --chart-3: #666666;
+  --chart-4: #999999;
+  --chart-5: #cccccc;
+  --sidebar: #f9f9f9;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #000000;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e5e5e5;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #000000;
 }
 
-/* Pas de thème clair séparé, on reste toujours dark */
+/* ─── Thème sombre ─────────────────────────────────────────────────────────── */
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #1a1a1a;
+  --card-foreground: #ffffff;
+  --popover: #0a0a0a;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #2a2a2a;
+  --secondary-foreground: #ffffff;
+  --muted: #3a3a3a;
+  --muted-foreground: #999999;
+  --accent: #ffffff;
+  --accent-foreground: #000000;
+  --destructive: #ff4444;
+  --destructive-foreground: #000000;
+  --border: #2a2a2a;
+  --input: #1a1a1a;
+  --ring: #ffffff;
+  --chart-1: #ffffff;
+  --chart-2: #cccccc;
+  --chart-3: #999999;
+  --chart-4: #666666;
+  --chart-5: #333333;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #2a2a2a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #2a2a2a;
+  --sidebar-ring: #ffffff;
+}
 
 @layer base {
   * {
@@ -87,15 +121,10 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
-
-  /* Scrollbar personnalisée */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: oklch(0.10 0.02 270); }
-  ::-webkit-scrollbar-thumb { background: oklch(0.30 0.08 290); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: oklch(0.50 0.15 290); }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
@@ -110,123 +139,100 @@
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
+    padding-left: 1rem;
     padding-right: 1rem;
   }
-
   .flex {
     min-height: 0;
     min-width: 0;
   }
-
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
-
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1280px;
     }
   }
 }
-/* ─── Glassmorphism ─────────────────────────────────────────────────────────── */
-.glass {
-  background: oklch(0.12 0.025 270 / 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid oklch(0.30 0.06 290 / 0.3);
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-.glass-strong {
-  background: oklch(0.10 0.025 270 / 0.88);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid oklch(0.40 0.10 290 / 0.4);
+::-webkit-scrollbar-track {
+  background: var(--input);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }
 
-/* ─── Glow ──────────────────────────────────────────────────────────────────── */
-.glow-primary {
-  box-shadow: 0 0 20px oklch(0.65 0.22 290 / 0.4), 0 0 60px oklch(0.65 0.22 290 / 0.15);
-}
-.glow-accent {
-  box-shadow: 0 0 20px oklch(0.55 0.25 260 / 0.4), 0 0 60px oklch(0.55 0.25 260 / 0.15);
-}
-.text-glow {
-  text-shadow: 0 0 20px oklch(0.65 0.22 290 / 0.8), 0 0 40px oklch(0.65 0.22 290 / 0.4);
-}
-
-/* ─── Gradient text ─────────────────────────────────────────────────────────── */
-.gradient-text {
-  background: linear-gradient(135deg, oklch(0.80 0.18 290), oklch(0.70 0.22 250), oklch(0.75 0.20 220));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ─── Fonts ─────────────────────────────────────────────────────────────────── */
-.font-orbitron { font-family: 'Orbitron', sans-serif; }
-.font-mono-custom { font-family: 'JetBrains Mono', monospace; }
-
-/* ─── Animations ────────────────────────────────────────────────────────────── */
+/* ─── Animations ───────────────────────────────────────────────────────────── */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-8px); }
 }
-.animate-float { animation: float 4s ease-in-out infinite; }
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 15px oklch(0.65 0.22 290 / 0.3); }
-  50% { box-shadow: 0 0 40px oklch(0.65 0.22 290 / 0.7), 0 0 80px oklch(0.65 0.22 290 / 0.3); }
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
-.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 
-@keyframes border-rotate {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
 }
 
 @keyframes shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
-.shimmer-effect::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.05), transparent);
-  animation: shimmer 2s infinite;
+
+/* ─── Utilitaires ──────────────────────────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-@keyframes particle-float {
-  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+.dark .glass {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-@keyframes scan-line {
-  0% { top: -2px; }
-  100% { top: 100%; }
+.glass-strong {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.dark .glass-strong {
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ─── Transitions fluides ──────────────────────────────────────────────────── */
+input, textarea, select, button {
+  transition: all 0.2s ease;
 }
